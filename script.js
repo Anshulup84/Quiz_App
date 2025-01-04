@@ -1,9 +1,10 @@
 const container = document.querySelector('.container')
-const question = document.querySelector('.question')
-const choices = document.querySelector('.choices')
+const questionBox = document.querySelector('.question')
+const choicesBox = document.querySelector('.choices')
 const nextbtn = document.querySelector('.nextBtn')
 
-const quiz = [
+// Add QUESTION
+const quiz = [ 
     {
         question: "Q. Which of the following is not a css box model property?",
         choices: ["margin", "padding", "border-radius", "border-collapse"],
@@ -24,4 +25,23 @@ const quiz = [
         choices: ["It refers to the current function.", "It refers to the current object.", "It refers to the parent object.", "It is used for comments."],
         answer: "It refers to the current object."
     }
-]
+];
+
+
+let currentQuestionIndex = 0
+
+// to show Questions
+const showQuestions =  () => {
+    const questionDetails = quiz[currentQuestionIndex];
+    questionBox.textContent = questionDetails.question;
+
+    for( let i=0; i<questionDetails.choices.length; i++) {
+        const currentChoice = questionDetails.choices[i];
+        const choiceDiv = document.createElement('div');
+        choiceDiv.textContent = currentChoice;
+        choicesBox.appendChild(choiceDiv)
+    }
+}
+nextbtn.addEventListener('click', ()=> {
+    showQuestions();
+})
