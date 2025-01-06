@@ -35,13 +35,32 @@ const showQuestions =  () => {
     const questionDetails = quiz[currentQuestionIndex];
     questionBox.textContent = questionDetails.question;
 
+    choicesBox.textContent = '' 
     for( let i=0; i<questionDetails.choices.length; i++) {
         const currentChoice = questionDetails.choices[i];
         const choiceDiv = document.createElement('div');
         choiceDiv.textContent = currentChoice;
+        choiceDiv.classList.add('choice')
         choicesBox.appendChild(choiceDiv)
+
+        choiceDiv.addEventListener('click', () => {
+            if(choiceDiv.classList.contains('selected')){
+                choiceDiv.classList.remove('selected');
+            }
+            else{
+                choiceDiv.classList.add('selected');
+            }
+        })
     }
 }
+
+// Function to check answers
+
+
+showQuestions();
 nextbtn.addEventListener('click', ()=> {
-    showQuestions();
+    if(currentQuestionIndex < quiz.length){
+        currentQuestionIndex++;
+        showQuestions();
+    }
 })
