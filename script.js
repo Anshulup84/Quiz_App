@@ -2,6 +2,8 @@ const container = document.querySelector('.container')
 const questionBox = document.querySelector('.question')
 const choicesBox = document.querySelector('.choices')
 const nextbtn = document.querySelector('.nextBtn')
+const scoreCard = document.querySelector('.scoreCard')
+
 
 // Add QUESTION
 const quiz = [ 
@@ -28,9 +30,10 @@ const quiz = [
 ];
 
 
-let currentQuestionIndex = 0
+let currentQuestionIndex = 0;
+let score = 0;
 
-// to show Questions
+// to show Questions on display
 const showQuestions =  () => {
     const questionDetails = quiz[currentQuestionIndex];
     questionBox.textContent = questionDetails.question;
@@ -56,11 +59,45 @@ const showQuestions =  () => {
 
 // Function to check answers
 
+const checkAnswer = () => {
+    const selectedChoice = document.querySelector('.choice.selected');
+    if(selectedChoice.textContent === quiz[currentQuestionIndex].answer){
+        alert("Correct Answer")
+        score++;
+    }
+    else{
+        alert("Wrong Answer")
+    }
+    currentQuestionIndex++;
+    if(currentQuestionIndex < quiz.length){
+        showQuestions();``
+    } else {
+        showScore();
+    }
+
+}
+
+//function to show score
+const showScore = () => {
+    questionBox.textContent = "";
+    choicesBox.textContent =  "";
+    scoreCard.textContent = `You Scored ${score} out of ${quiz.length}!`
+    nextbtn.textContent = "Play Again";
+    nextbtn.addEventListener('click', () => {
+        currentQuestionIndex = 0;
+        showQuestions();
+        nextbtn.textContent = "Next";
+        scoreCard.textContent = ""
+    })
+}
 
 showQuestions();
 nextbtn.addEventListener('click', ()=> {
-    if(currentQuestionIndex < quiz.length){
-        currentQuestionIndex++;
-        showQuestions();
+    const selectedChoice = document.querySelector('.choice.selected')
+    if(!selectedChoice && nextbtn.textContent === "Next"){
+        alert("Select your answer")
+    } else {
+        checkAnswer();
     }
+  
 })
