@@ -79,3 +79,13 @@ body {
     font-size: 24px;
     margin-top: 20px;
 }
+
+.alert{
+    background-color: #5d9b63;
+    border-radius: 5px;
+    width: 100%;
+    padding: 12px;
+    position: absolute;
+    top: 0;
+    display: none;
+}
