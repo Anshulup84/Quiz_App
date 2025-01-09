@@ -4,6 +4,8 @@ const choicesBox = document.querySelector('.choices')
 const nextbtn = document.querySelector('.nextBtn')
 const scoreCard = document.querySelector('.scoreCard')
 const alert = document.querySelector('.alert')
+const startBtn = document.querySelector('.startBtn')
+const timer = document.querySelector('.timer')
 
 
 // Add QUESTION
@@ -34,6 +36,7 @@ const quiz = [
 let currentQuestionIndex = 0;
 let score = 0;
 let quizOver = false;
+let timeLeft = 15;
 
 // to show Questions on display
 const showQuestions =  () => {
@@ -70,7 +73,7 @@ const checkAnswer = () => {
     }
     else{
         // alert("Wrong Answer")
-        displayAlert("Wrong Answer")
+        displayAlert(`Wrong Answer! ${quiz[currentQuestionIndex].answer} is the Correct Answer`);
     }
     currentQuestionIndex++;
     if(currentQuestionIndex < quiz.length){
@@ -101,11 +104,23 @@ const displayAlert = (msg) => {
     }, 2000)
 }
 
-showQuestions();
+// Function to start timer
+const startTimer = () => {
+    timer.textContent = timeLeft;
+    timeLeft--;
+}
+
+// Adding Event Listener to Start Button
+startBtn.addEventListener('click', ()=> {
+    startBtn.style.display = "none";
+    container.style.display = "block"
+    showQuestions();
+});
+
+
 nextbtn.addEventListener('click', ()=> {
     const selectedChoice = document.querySelector('.choice.selected')
     if(!selectedChoice && nextbtn.textContent === "Next"){
-        // alert("Select your answer")
         displayAlert("Select your answer")
         return
     }
