@@ -37,6 +37,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let quizOver = false;
 let timeLeft = 15;
+let timerId = null;
 
 // to show Questions on display
 const showQuestions =  () => {
@@ -58,7 +59,11 @@ const showQuestions =  () => {
             else{
                 choiceDiv.classList.add('selected');
             }
-        })
+        });
+    }
+
+    if(currentQuestionIndex  < quiz.length){
+        startTimer()
     }
 }
 
@@ -75,12 +80,14 @@ const checkAnswer = () => {
         // alert("Wrong Answer")
         displayAlert(`Wrong Answer! ${quiz[currentQuestionIndex].answer} is the Correct Answer`);
     }
+    timeLeft = 15
     currentQuestionIndex++;
     if(currentQuestionIndex < quiz.length){
         showQuestions();
     } else {
         showScore();
-        quizOver = true
+        stopTimer();
+        
     }
 
 }
@@ -92,7 +99,8 @@ const showScore = () => {
     scoreCard.textContent = `You Scored ${score} out of ${quiz.length}!`
     displayAlert("You have completed this quiz!");
     nextbtn.textContent = "Play Again";
-   
+   quizOver = true;
+   timer.style.display = "none"
 }
 
 // Function to Show alert
@@ -106,15 +114,49 @@ const displayAlert = (msg) => {
 
 // Function to start timer
 const startTimer = () => {
+    clearInterval(timerId); // check if any exist timer
     timer.textContent = timeLeft;
-    timeLeft--;
+    const countDown = () => {
+        timeLeft--;
+        timer.textContent = timeLeft;
+        if(timeLeft === 0) {
+            const confirmUser = confirm("Time up!!! Do you want to play the quiz again");
+            if(confirmUser){
+                timeLeft = 15;
+                startQuiz();
+            } 
+            else {
+                startBtn.style.display = "block";
+                container.style.display = "none";
+                return;
+            }
+        }
+    }
+    timerId = setInterval(countDown , 1000)
 }
+
+// Function to stop Timer
+
+const stopTimer = () => {
+    clearInterval(timerId)
+}
+
+// function to start quiz
+const startQuiz = () => {
+    timeLeft = 15;
+    timer.style.display = "flex"
+    showQuestions()
+}
+
+// Adding function to shuffle question
+
+
 
 // Adding Event Listener to Start Button
 startBtn.addEventListener('click', ()=> {
     startBtn.style.display = "none";
     container.style.display = "block"
-    showQuestions();
+    startQuiz();
 });
 
 
@@ -128,7 +170,7 @@ nextbtn.addEventListener('click', ()=> {
         nextbtn.textContent = "Next";
         scoreCard.textContent = ""
         currentQuestionIndex = 0;
-        showQuestions();
+        startQuiz();
         quizOver = false;
         score = 0;
     }
